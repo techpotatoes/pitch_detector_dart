@@ -1,5 +1,5 @@
 import 'package:test/scaffolding.dart';
-import 'package:yin/algorithm/yin.dart';
+import 'package:pitch_detector_dart/algorithm/yin.dart';
 import "package:test/test.dart";
 
 import '../test_util.dart';

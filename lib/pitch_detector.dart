@@ -1,8 +1,8 @@
-library yin;
+library pitch_detector_dart;
 
-import 'package:yin/algorithm/pitch_algorithm.dart';
-import 'package:yin/algorithm/yin.dart';
-import 'package:yin/pitch_detector_result.dart';
+import 'package:pitch_detector_dart/algorithm/pitch_algorithm.dart';
+import 'package:pitch_detector_dart/algorithm/yin.dart';
+import 'package:pitch_detector_dart/pitch_detector_result.dart';
 
 class PitchDetector {
   final PitchAlgorithm _pitchAlgorithm;

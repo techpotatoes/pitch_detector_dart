@@ -1,5 +1,5 @@
-import 'package:yin/algorithm/pitch_algorithm.dart';
-import 'package:yin/pitch_detector_result.dart';
+import 'package:pitch_detector_dart/algorithm/pitch_algorithm.dart';
+import 'package:pitch_detector_dart/pitch_detector_result.dart';
 
 //  An implementation of the AUBIO_YIN pitch tracking algorithm.
 //  This is a port of the TarsosDSP library developed by Joren Six and Paul Brossier at IPEM, University Ghent

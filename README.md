@@ -1,4 +1,4 @@
-## dart YIN library
+## Pitch detector dart library
 
 A dart library for pitch detection. It implements the yin algorithm port from the tarsosDSP library by Joren Six.
 

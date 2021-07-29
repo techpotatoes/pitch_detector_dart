@@ -1,4 +1,4 @@
-library yin;
+library pitch_detector_dart;
 
 class PitchDetectorResult {
   double pitch;
