@@ -1,6 +1,6 @@
 ## dart YIN library
 
-A dart port of the tarsosDSP library by Joren Six. It implements the yin algorithm for pitch detection. 
+A dart library for pitch detection. It implements the yin algorithm port from the tarsosDSP library by Joren Six.
 
 ## Getting started
 
