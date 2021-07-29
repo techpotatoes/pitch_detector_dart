@@ -1,5 +1,4 @@
-library yin;
-
+import 'package:yin/algorithm/pitch_algorithm.dart';
 import 'package:yin/pitch_detector_result.dart';
 
 //  An implementation of the AUBIO_YIN pitch tracking algorithm.
@@ -7,10 +6,8 @@ import 'package:yin/pitch_detector_result.dart';
 //  Original implementation : https://github.com/JorenSix/TarsosDSP
 //
 //  Ported by Techpotatoes - Lucas Bento
-//    Info: https://techpotatoes.github.io/dartYIN/
-//    Github: https://github.com/techpotatoes/dartYIN
 
-class Yin {
+class Yin extends PitchAlgorithm {
   //The default YIN threshold value. Should be around 0.10~0.15. See YIN
   //paper for more information.
   static final double DEFAULT_THRESHOLD = 0.20;
@@ -30,6 +27,7 @@ class Yin {
         this._yinBuffer = List<double>.filled(bufferSize ~/ 2, 0.0),
         this._result = new PitchDetectorResult.empty();
 
+  @override
   PitchDetectorResult getPitch(final List<double> audioBuffer) {
     final int tauEstimate;
     final double pitchInHertz;
