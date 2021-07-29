@@ -1,0 +1,3 @@
+library yin;
+
+class Yin {}

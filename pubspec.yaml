@@ -1,0 +1,12 @@
+name: yin
+description: A dart port of the tarsosDSP library by Joren Six. It implements the yin algorithm for pitch detection. 
+version: 0.0.1
+homepage: https://techpotatoes.github.io/dartYIN/
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  test: ^1.17.10
+
+dev_dependencies:
