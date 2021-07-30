@@ -1,6 +1,6 @@
 name: pitch_detector_dart
 description: A dart library for pitch detection. It implements the yin algorithm port from the tarsosDSP library by Joren Six.
-version: 0.0.1
+version: 0.0.2
 homepage: https://techpotatoes.github.io/pitch_detector_dart/
 
 environment:
