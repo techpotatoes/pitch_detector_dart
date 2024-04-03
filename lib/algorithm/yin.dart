@@ -19,17 +19,14 @@ class Yin extends PitchAlgorithm {
   final double _threshold;
   final double _sampleRate;
   final List<double> _yinBuffer;
-  final PitchDetectorResult _result;
 
   Yin(double audioSampleRate, int bufferSize)
       : this._sampleRate = audioSampleRate,
         this._threshold = DEFAULT_THRESHOLD,
-        this._yinBuffer = List<double>.filled(bufferSize ~/ 2, 0.0),
-        this._result = new PitchDetectorResult.empty();
+        this._yinBuffer = List<double>.filled(bufferSize ~/ 2, 0.0);
 
   @override
-  PitchDetectorResult getPitch(final List<double> audioBuffer) {
-    final int tauEstimate;
+  Future<PitchDetectorResult> getPitch(final List<double> audioBuffer) {
     final double pitchInHertz;
 
     // step 2
@@ -39,11 +36,11 @@ class Yin extends PitchAlgorithm {
     _cumulativeMeanNormalizedDifference();
 
     // step 4
-    tauEstimate = _absoluteThreshold();
+    final pitched = _absoluteThreshold();
 
     // step 5
-    if (tauEstimate != -1) {
-      final double betterTau = _parabolicInterpolation(tauEstimate);
+    if (pitched.tau != -1) {
+      final double betterTau = _parabolicInterpolation(pitched.tau);
 
       // step 6
       // TODO Implement optimization for the AUBIO_YIN algorithm.
@@ -58,9 +55,11 @@ class Yin extends PitchAlgorithm {
       pitchInHertz = -1;
     }
 
-    _result.pitch = pitchInHertz;
-
-    return _result;
+    return Future.value(PitchDetectorResult(
+      pitch: pitchInHertz,
+      probability: pitched.probability,
+      pitched: pitched.pitched,
+    ));
   }
 
   //Implements the difference function as described in step 2 of the YIN
@@ -90,10 +89,13 @@ class Yin extends PitchAlgorithm {
   }
 
   //Implements step 4 of the AUBIO_YIN paper.
-  int _absoluteThreshold() {
+  Pitched _absoluteThreshold() {
     // Uses another loop construct
     // than the AUBIO implementation
     int tau;
+    double probability = -1;
+    bool pitched = false;
+
     // first two positions in yinBuffer are always 1
     // So start at the third (index 2)
     for (tau = 2; tau < _yinBuffer.length; tau++) {
@@ -111,7 +113,7 @@ class Yin extends PitchAlgorithm {
         //
         // Since we want the periodicity and and not aperiodicity:
         // periodicity = 1 - aperiodicity
-        _result.probability = 1 - _yinBuffer[tau];
+        probability = 1 - _yinBuffer[tau];
         break;
       }
     }
@@ -119,13 +121,16 @@ class Yin extends PitchAlgorithm {
     // if no pitch found, tau => -1
     if (tau == _yinBuffer.length || _yinBuffer[tau] >= _threshold) {
       tau = -1;
-      _result.probability = 0;
-      _result.pitched = false;
+      probability = 0;
+      pitched = false;
     } else {
-      _result.pitched = true;
+      pitched = true;
     }
 
-    return tau;
+    return Pitched(
+      tau, 
+      probability,
+      pitched);
   }
 
   //Implements step 5 of the AUBIO_YIN paper. It refines the estimated tau
@@ -171,4 +176,12 @@ class Yin extends PitchAlgorithm {
     }
     return betterTau;
   }
+}
+
+class Pitched {
+  final int tau;
+  final double probability;
+  final bool pitched;
+
+  Pitched(this.tau, this.probability, this.pitched);
 }
