@@ -18,7 +18,7 @@ dependencies:
 final pitchDetectorDart = PitchDetector(44100, 2000);
 
 //Call the get pitch method passing as a parameter the audio sample (List<double>) to detect a pitch 
-final result = pitchDetectorDart.getPitch(audioSample);
+final result = await pitchDetectorDart.getPitch(audioSample);
 ```
 
 See the full example here: https://github.com/techpotatoes/pitchup_flutter_sample
