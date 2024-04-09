@@ -8,7 +8,7 @@ To import the library into your project, go to your project pubspec.yaml and add
 
 ```dart
 dependencies:
-  pitch_detector_dart: ^0.0.5
+  pitch_detector_dart: ^0.0.7
 ```
 
 ## Usage

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+/// Converts PCM16 encondig to float.
 extension PCMConversions on Uint8List {
   List<double> convertPCM16ToFloat() {
     ByteData byteData = buffer.asByteData();
