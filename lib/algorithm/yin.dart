@@ -1,20 +1,23 @@
 import 'package:pitch_detector_dart/algorithm/pitch_algorithm.dart';
 import 'package:pitch_detector_dart/pitch_detector_result.dart';
 
-//  An implementation of the AUBIO_YIN pitch tracking algorithm.
-//  This is a port of the TarsosDSP library developed by Joren Six and Paul Brossier at IPEM, University Ghent
-//  Original implementation : https://github.com/JorenSix/TarsosDSP
-//
-//  Ported by Techpotatoes - Lucas Bento
+/// An implementation of the AUBIO_YIN pitch tracking algorithm.
+/// This is a port of the TarsosDSP library developed by Joren Six and Paul Brossier at IPEM, University Ghent
+/// Original implementation : https://github.com/JorenSix/TarsosDSP
+///
+/// Ported by Techpotatoes - Lucas Bento
+///
 
 class Yin extends PitchAlgorithm {
-  //The default YIN threshold value. Should be around 0.10~0.15. See YIN
-  //paper for more information.
-  static final double DEFAULT_THRESHOLD = 0.20;
-  //The default size of an audio buffer (in samples).
-  static final int DEFAULT_BUFFER_SIZE = 2048;
-  //The default overlap of two consecutive audio buffers (in samples).
-  static final int DEFAULT_OVERLAP = 1536;
+  /// The default YIN threshold value. Should be around 0.10~0.15. See YIN
+  /// paper for more information.
+  static final double defaultThreshold = 0.20;
+
+  /// The default size of an audio buffer (in samples).
+  static final int defaultBufferSize = 2048;
+
+  /// The default overlap of two consecutive audio buffers (in samples).
+  static final int defaultOverlap = 1536;
 
   final double _threshold;
   final double _sampleRate;
@@ -22,7 +25,7 @@ class Yin extends PitchAlgorithm {
 
   Yin(double audioSampleRate, int bufferSize)
       : this._sampleRate = audioSampleRate,
-        this._threshold = DEFAULT_THRESHOLD,
+        this._threshold = defaultThreshold,
         this._yinBuffer = List<double>.filled(bufferSize ~/ 2, 0.0);
 
   @override
@@ -62,7 +65,7 @@ class Yin extends PitchAlgorithm {
     ));
   }
 
-  //Implements the difference function as described in step 2 of the YIN
+  /// Implements the difference function as described in step 2 of the YIN
   void _difference(final List<double> audioBuffer) {
     int index, tau;
     double delta;
@@ -77,7 +80,7 @@ class Yin extends PitchAlgorithm {
     }
   }
 
-  //The cumulative mean normalized difference function as described in step 3 of the YIN paper.
+  /// The cumulative mean normalized difference function as described in step 3 of the YIN paper.
   void _cumulativeMeanNormalizedDifference() {
     int tau;
     _yinBuffer[0] = 1;
@@ -88,7 +91,7 @@ class Yin extends PitchAlgorithm {
     }
   }
 
-  //Implements step 4 of the AUBIO_YIN paper.
+  /// Implements step 4 of the AUBIO_YIN paper.
   Pitched _absoluteThreshold() {
     // Uses another loop construct
     // than the AUBIO implementation
@@ -96,8 +99,8 @@ class Yin extends PitchAlgorithm {
     double probability = -1;
     bool pitched = false;
 
-    // first two positions in yinBuffer are always 1
-    // So start at the third (index 2)
+    /// first two positions in yinBuffer are always 1
+    /// So start at the third (index 2)
     for (tau = 2; tau < _yinBuffer.length; tau++) {
       if (_yinBuffer[tau] < _threshold) {
         while (tau + 1 < _yinBuffer.length &&
@@ -127,17 +130,14 @@ class Yin extends PitchAlgorithm {
       pitched = true;
     }
 
-    return Pitched(
-      tau, 
-      probability,
-      pitched);
+    return Pitched(tau, probability, pitched);
   }
 
-  //Implements step 5 of the AUBIO_YIN paper. It refines the estimated tau
-  //value using parabolic interpolation. This is needed to detect higher
-  //frequencies more precisely. See http://fizyka.umk.pl/nrbook/c10-2.pdf and
-  // for more background
-  //http://fedc.wiwi.hu-berlin.de/xplore/tutorials/xegbohtmlnode62.html
+  /// Implements step 5 of the AUBIO_YIN paper. It refines the estimated tau
+  /// value using parabolic interpolation. This is needed to detect higher
+  /// frequencies more precisely. See http://fizyka.umk.pl/nrbook/c10-2.pdf and
+  /// for more background
+  /// http://fedc.wiwi.hu-berlin.de/xplore/tutorials/xegbohtmlnode62.html
   double _parabolicInterpolation(final int tauEstimate) {
     final double betterTau;
     final int x0;

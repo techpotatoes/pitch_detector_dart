@@ -13,25 +13,26 @@ void main() {
       audioSampleRate: 44100,
       bufferSize: 200,
     );
-    final List<double> audioBuffer = TestUtil.audioBufferSine();
-    final List<double> audioBuffer200 = TestUtil.audioBufferSine200Size();
-    final Uint8List audioBufferInt = TestUtil.audioBufferInt();
-    test("should return an error if audioSample does not meet the bufferSize", () async {
-
-      expect(() => pitchDetector.getPitchFromFloatBuffer(audioBuffer),
-        throwsA(isA<InvalidAudioBufferException>()));
+    final List<double> audioSample200 = TestUtil.audioSampleSine200Size();
+    final List<double> audioSample100 = TestUtil.audioSampleSine100Size();
+    final Uint8List audioSampleInt = TestUtil.audioSampleInt();
+    test("should return an error if audioSample is smaller than the bufferSize",
+        () async {
+      expect(() => pitchDetector.getPitchFromFloatBuffer(audioSample100),
+          throwsA(isA<InvalidAudioBufferException>()));
     });
 
-    test("should return a response if bufferSize and sample size match", () async {
-
-      final result = await pitchDetector.getPitchFromFloatBuffer(audioBuffer200);
+    test("should return a response if bufferSize and sample size match",
+        () async {
+      final result =
+          await pitchDetector.getPitchFromFloatBuffer(audioSample200);
 
       expect(result, isA<PitchDetectorResult>());
     });
 
-     test("should return a response when the audio sample is a UInt8List", () async {
-
-      final result = await pitchDetector.getPitchFromIntBuffer(audioBufferInt);
+    test("should return a response when the audio sample is a UInt8List",
+        () async {
+      final result = await pitchDetector.getPitchFromIntBuffer(audioSampleInt);
 
       expect(result, isA<PitchDetectorResult>());
     });

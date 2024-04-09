@@ -1,14 +1,13 @@
-  import 'dart:typed_data';
+import 'dart:typed_data';
 
-  extension PCMConversions on Uint8List {
+extension PCMConversions on Uint8List {
+  List<double> convertPCM16ToFloat() {
+    ByteData byteData = buffer.asByteData();
+    List<double> floatList = [
+      for (var offset = 0; offset < length; offset += 2)
+        ((byteData.getUint16(offset) & 0xFF) - 32767) * (1.0 / 32767.0)
+    ];
 
-    List<double> convertPCM16ToFloat() {
-        ByteData byteData = buffer.asByteData();
-        List<double> floatList = [
-          for (var offset = 0; offset < length; offset += 2)
-            ((byteData.getUint16(offset) & 0xFF) - 32767) * (1.0 / 32767.0)
-          ];
-        
-        return floatList;
-      }  
+    return floatList;
+  }
 }

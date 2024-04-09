@@ -5,7 +5,7 @@ import '../test_util.dart';
 
 void main() {
   group("Given a 2 seconds sine audio input of 440hz at 44.1Khz", () {
-    final List<double> audioBuffer = TestUtil.audioBufferSine();
+    final List<double> audioBuffer = TestUtil.audioSampleSine();
     test("should return 440Hz when using the Yin algorithm", () async {
       Yin yin = new Yin(44100, 1024);
 
